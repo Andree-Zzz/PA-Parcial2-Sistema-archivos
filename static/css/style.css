@@ -1,0 +1,53 @@
+html,
+body{
+    height: 100%;
+    background-color: white !important;
+    font-family: "Roboto", 'Segoe UI', Tahoma, Verdana, sans-serif;
+}
+
+.global-container{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+}
+form{
+    padding-top: 10px;
+    font-size: 14px;
+    margin-top: 40px;
+}
+.registro-form{
+    width: 380px;
+    height: 450px;
+    margin: 20px;
+    background: white !important;
+    border-radius: 10px !important;
+}
+
+input[type="name"],
+input[type="email"],
+input[type="password"]{
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(16, 192, 192);
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+.card-title{
+    font-weight: 900;
+    padding-top: 20px;
+}
+.boton{
+    text-align: center;
+}
+.btn{
+    background: rgb(33, 143, 143) !important;
+    font-size: 14px;
+    border: 1px solid rgb(33, 143, 143);
+    transform: translateY(10px);
+    border-radius: 12px !important;
+}
+.ingresar{
+    text-align: center;
+    padding-top: 25px;
+}
