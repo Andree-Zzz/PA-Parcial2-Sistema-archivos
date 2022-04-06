@@ -19,20 +19,14 @@ USE `sistema_archivos`;
 
 -- Volcando estructura para tabla sistema_archivos.users
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `id` smallint(3) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(150) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla sistema_archivos.users: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-	(1, 'Andrés Camilo Morales', 'perro@gg.com', '124234'),
-	(2, 'Andrés Camilo Morales', 'perro@gg.com', 'q'),
-	(3, 'Andrés Camilo Morales', 'perro@gg.com', '111');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+-- La exportación de datos fue deseleccionada.
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
