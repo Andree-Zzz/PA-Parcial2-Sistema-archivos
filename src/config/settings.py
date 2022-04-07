@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 #Cargar el archivo .env a las variables de entorno
 load_dotenv()
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
 MYSQL_HOSTNAME = os.environ.get('MYSQL_HOSTNAME')
 MYSQL_USERNAME = os.environ.get('MYSQL_USERNAME')
 MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD')

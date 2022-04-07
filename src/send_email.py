@@ -5,6 +5,16 @@ from config import settings
 
 message = EmailMessage()
 
+def emailBienvenida(destinatario: string):
+    sendEmail(
+        'Bienvenido a Clover, Registro Exitoso',
+        destinatario,
+        '''
+        Registro Exitoso.
+        Bienvenido a Clover-Flask-PA-P2
+        '''
+    )
+
 def sendEmail(asunto: string, destinatario: string, mensaje):
     message['Subject'] = asunto
     message['From'] = settings.SMTP_USERNAME

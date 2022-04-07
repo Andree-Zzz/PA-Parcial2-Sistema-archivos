@@ -4,13 +4,13 @@ from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
 from models.model_user import ModelUser
-from send_email import sendEmail
+from send_email import emailBienvenida, sendEmail
+from config.settings import SECRET_KEY
 
 app = Flask(__name__)
 
-csrf = CSRFProtect()
-
-app.secret_key = '#andSecretKey'
+app.secret_key = SECRET_KEY
+csrf = CSRFProtect(app)
 login_manager_app = LoginManager(app)
 
 @login_manager_app.user_loader
@@ -48,11 +48,7 @@ def registrarUsuario():
         )
     else:
         ModelUser.crearUsuario(user)
-        sendEmail(
-            'Bienvenido a la App - Flask (PA-P2)',
-            user.email,
-            'Bienvenido a la App -Clover- con Flask (PA-P2)'
-        )
+        emailBienvenida(user.email)
         return redirect(url_for('login'))
 
 @app.get("/login")
