@@ -4,6 +4,7 @@ from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
 from models.model_user import ModelUser
+from send_email import sendEmail
 
 app = Flask(__name__)
 
@@ -37,9 +38,7 @@ def registrarUsuario():
         request.form.get('email'),
         request.form.get('password')
     )
-
     isValid = ModelUser.isValidForm('registro',user)
-    print(isValid)
     if isValid == False:
         return render_template(
             "/auth/registro_login.html",
@@ -47,8 +46,14 @@ def registrarUsuario():
             username = user.username,
             email = user.email
         )
-    ModelUser.crearUsuario(user)
-    return redirect(url_for('login'))
+    else:
+        ModelUser.crearUsuario(user)
+        sendEmail(
+            'Bienvenido a la App - Flask (PA-P2)',
+            user.email,
+            'Bienvenido a la App -Clover- con Flask (PA-P2)'
+        )
+        return redirect(url_for('login'))
 
 @app.get("/login")
 def login():
@@ -59,7 +64,6 @@ def loginPost():
     user = User(0,None,request.form.get('email'),request.form.get('password'))
     
     isValid = ModelUser.isValidForm('login',user)
-    print(isValid)
     if isValid == False:
         return render_template(
             "/auth/registro_login.html",
@@ -67,19 +71,18 @@ def loginPost():
             username = user.username,
             email = user.email
         )
-    
-    user_logeado = ModelUser.login(user)
-
-    if user_logeado != None:
-        if user_logeado.password:
-            login_user(user_logeado)
-            return redirect(url_for('home'))
-        else:
-            flash("Contraseña invalida.")
-            return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
     else:
-        flash("Usuario no encontrado.")
-        return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
+        user_logeado = ModelUser.login(user)
+        if user_logeado != None:
+            if user_logeado.password:
+                login_user(user_logeado)
+                return redirect(url_for('home'))
+            else:
+                flash("Contraseña invalida.")
+                return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
+        else:
+            flash("Usuario no encontrado.")
+            return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
 
 @app.get("/logout")
 @login_required

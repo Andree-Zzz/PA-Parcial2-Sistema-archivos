@@ -1,3 +1,4 @@
+import re
 from string import punctuation
 from flask import flash
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -62,55 +63,66 @@ class ModelUser():
             return True
         else:
             return False
+    
+    @classmethod
+    def emailValido(self, email):
+        expresion_regular = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"
+        return re.match(expresion_regular, email) is not None
 
     @classmethod
     def isValidForm(self, pagina, user: User):
+        isValidUsername = True
+        isValidEmail = True
+        isValidPassword = True
         if pagina == 'registro':
-            isValid = True
+            
             if user.username == "":
-                isValid = False
+                isValidUsername = False
                 flash("El Nombre de usuario es requerido")
 
             if user.email == "":
-                isValid = False
+                isValidEmail = False
                 flash("El Email es requerido")
             else:
-                if self.emailUsed(user.email):
-                    isValid = False
-                    flash("El Email ya fue registrado")
+                if not self.emailValido(user.email):
+                    isValidEmail = False
+                    flash("Ingresa un Email Valido")
+                else:
+                    if self.emailUsed(user.email):
+                        isValidEmail = False
+                        flash("El Email ya fue registrado")
 
             if user.password == "":
-                isValid = False
+                isValidPassword = False
                 flash("La Contraseña es requerida")
 
             if len(user.password) < 8:
-                isValid = False
+                isValidPassword = False
                 flash("La Contraseña debe tener minimo 8 caracteres")
             else:
                 if any([crt.isdigit() for crt in user.password]):
                     if any([crt.isupper() for crt in user.password]):
                         if any([True if crt in punctuation else False for crt in user.password]):
-                            isValid = True
+                            isValidPassword = True
                         else:
-                            isValid = False
+                            isValidPassword = False
                             flash("La Contraseña debe tener: 1 caracter especial.")
                     else:
-                        isValid = False
+                        isValidPassword = False
                         flash("La Contraseña debe tener: 1 una Mayuscula")
                 else:
-                    isValid = False
+                    isValidPassword = False
                     flash("La Contraseña debe tener: 1 numero.")
             
-            return isValid
+            return (isValidUsername and isValidEmail and isValidPassword)
         else:
             if pagina == 'login':
-                isValid = True
                 if user.email == "":
-                    isValid = False
+                    isValidEmail = False
                     flash("El Email es Obligatorio")
 
                 if user.password == "":
-                    isValid = False
+                    isValidPassword = False
                     flash("La Contraseña es Obligatoria")
 
-                return isValid
+            return (isValidUsername and isValidEmail and isValidPassword)
