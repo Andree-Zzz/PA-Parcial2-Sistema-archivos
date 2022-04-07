@@ -28,5 +28,7 @@ def sendEmail(asunto: string, destinatario: string, mensaje):
     server.starttls()
     server.login(username,password)
     server.send_message(message)
-
+    del message['Subject']
+    del message['From']
+    del message['To']
     server.quit()
