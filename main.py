@@ -3,8 +3,8 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
-from models.model_user import ModelUser
-from send_email import emailBienvenida, sendEmail
+from controllers import userController
+from send_email import emailBienvenida
 from config.settings import SECRET_KEY
 
 app = Flask(__name__)
@@ -15,7 +15,7 @@ login_manager_app = LoginManager(app)
 
 @login_manager_app.user_loader
 def load_user(id):
-    return ModelUser.getUserById(id)
+    return userController.getUserById(id)
 
 @app.get("/")
 def index():
@@ -38,7 +38,7 @@ def registrarUsuario():
         request.form.get('email'),
         request.form.get('password')
     )
-    isValid = ModelUser.isValidForm('registro',user)
+    isValid = userController.isValidForm('registro',user)
     if isValid == False:
         return render_template(
             "/auth/registro_login.html",
@@ -47,7 +47,7 @@ def registrarUsuario():
             email = user.email
         )
     else:
-        ModelUser.crearUsuario(user)
+        userController.crearUsuario(user)
         emailBienvenida(user.email)
         return redirect(url_for('login'))
 
@@ -59,7 +59,7 @@ def login():
 def loginPost():
     user = User(0,None,request.form.get('email'),request.form.get('password'))
     
-    isValid = ModelUser.isValidForm('login',user)
+    isValid = userController.isValidForm('login',user)
     if isValid == False:
         return render_template(
             "/auth/registro_login.html",
@@ -68,7 +68,7 @@ def loginPost():
             email = user.email
         )
     else:
-        user_logeado = ModelUser.login(user)
+        user_logeado = userController.login(user)
         if user_logeado != None:
             if user_logeado.password:
                 login_user(user_logeado)
@@ -90,7 +90,7 @@ def status_401(error):
     return redirect(url_for('login'))
 
 def status_404(error):
-    return "<h1>404: Pagina no encontrada :/<h1/>"
+    return "<h1>404: Pagina no encontrada...<h1/>"
 
 app.register_error_handler(401,status_401)
 app.register_error_handler(404,status_404)

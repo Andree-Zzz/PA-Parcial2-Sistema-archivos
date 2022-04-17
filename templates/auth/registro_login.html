@@ -18,8 +18,8 @@
 {% if pagina == 'Iniciar sesion'%}
 <form class="form-signin text-center" action="{{ url_for('loginPost') }}" method="POST">
 {% endif %}
-  <img class="mb-3" src="{{ url_for('static', filename='img/black-clover.png') }}" alt="" width="95" height="95">
-  <h1 class="h3 mb-3 fw-normal">{{ pagina }}</h1>
+  <img class="mb-2" src="{{ url_for('static', filename='img/black-clover.png') }}" alt="" width="95" height="95">
+  <h1 class="h3 mb-3 fw-normal text-white">{{ pagina }}</h1>
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
   {% if pagina == 'Registro'%}
@@ -33,7 +33,7 @@
     <input type="email" class="form-control" name="email" id="floatingInputEmail" value="{{ email }}" placeholder="micorreo@ejemplo.com">
     <label for="floatingInputEmail">Email</label>
   </div>
-  <div class="form-floating">
+  <div class="form-floating mb-3">
     <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Contraseña">
     <label for="floatingPassword">Contraseña</label>
   </div>
@@ -56,12 +56,12 @@
   <a href="{{ url_for('registro') }}">¿No tienes una cuenta? Registrate</a>
   {% endif %}
 
-  {% if pagina == 'Registro'%}
-  <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">Registrarme</button>
-  {% endif %}
-  {% if pagina == 'Iniciar sesion'%}
-  <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">Ingresar</button>
-  {% endif %}
-  <p class="mt-4 mb-3 text-muted">&copy; 2022–2023 Instituto Tecnologico del Putumayo</p>
+  <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">
+    {% if pagina == 'Registro'%}Registrarme{% endif %}
+    {% if pagina == 'Iniciar sesion'%}Ingresar{% endif %}
+  </button>
+  
+  <p class="mt-4 mb-3 text-muted">&copy; 2022 PA - Instituto Tecnologico del Putumayo</p>
 </form>
+
 {% endblock %}
