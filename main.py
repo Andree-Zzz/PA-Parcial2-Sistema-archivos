@@ -4,7 +4,7 @@ from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
 from controllers import userController
-from send_email import emailBienvenida
+from send_email import emailBienvenida, send_email
 from config.settings import SECRET_KEY
 
 app = Flask(__name__)
@@ -32,12 +32,7 @@ def registro():
 
 @app.post("/registro")
 def registrarUsuario():
-    user = User(
-        0,
-        request.form.get('username'),
-        request.form.get('email'),
-        request.form.get('password')
-    )
+    user = User(0,request.form.get('username'),request.form.get('email'),request.form.get('password'))
     isValid = userController.isValidForm('registro',user)
     if isValid == False:
         return render_template(
@@ -48,7 +43,7 @@ def registrarUsuario():
         )
     else:
         userController.crearUsuario(user)
-        emailBienvenida(user.email)
+        emailBienvenida(user.username, user.email)
         return redirect(url_for('login'))
 
 @app.get("/login")
