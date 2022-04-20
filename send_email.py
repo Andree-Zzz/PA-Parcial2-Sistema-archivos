@@ -30,6 +30,7 @@ def send_email(asunto, destinatario, msg_html):
     ).start()
 
 logger = logging.getLogger(__name__)
+
 def _send_async_email(app, message):
     with app.app_context():
         try:
