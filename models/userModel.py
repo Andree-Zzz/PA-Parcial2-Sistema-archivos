@@ -45,7 +45,7 @@ class UserModel():
             raise Exception(ex)
     
     @classmethod
-    def validateToken(self, token):
+    def validToken(self, token):
         try:
             cursor = db.cursor()
             cursor.execute("SELECT * FROM users WHERE token = %s", (
@@ -64,7 +64,7 @@ class UserModel():
     def confirmUser(self,id):
         try:
             cursor = db.cursor()
-            cursor.execute("UPDATE users SET confirmed='true' WHERE  id=%s", (
+            cursor.execute("UPDATE users SET token='', confirmed='true' WHERE  id=%s", (
                 id,
             ))
             cursor.close()
@@ -98,7 +98,7 @@ class UserModel():
     @classmethod
     def crearUsuario(self, user: User):
         try:
-            token = (''.join(random.choice(string.ascii_letters + string.digits) for _ in range(5)))
+            token = (''.join(random.choice(string.ascii_letters + string.digits) for _ in range(7)))
             cursor = db.cursor()
             cursor.execute("INSERT INTO users(username, email, password, token) values (%s,%s,%s,%s)",(
                 user.username,

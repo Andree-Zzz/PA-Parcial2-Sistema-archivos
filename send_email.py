@@ -1,5 +1,4 @@
 import logging
-import string
 from flask import current_app
 from smtplib import SMTP, SMTPException
 from email.mime.multipart import MIMEMultipart
@@ -11,7 +10,7 @@ from config import settings
 
 message = MIMEMultipart()
 
-def emailBienvenida(username: string, email: string, url: string):
+def emailBienvenida(username, email, url):
     send_email(
         asunto='Bienvenido, Registro Exitoso',
         destinatario=email,

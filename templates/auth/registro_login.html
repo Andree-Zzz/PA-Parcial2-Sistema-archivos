@@ -26,19 +26,24 @@
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
   {% if pagina == 'Registro'%}
-    <div class="form-floating mb-3">
+    <div class="form-floating mb-2">
       <input type="text" class="form-control" name="username" id="floatingInputName" value="{{ username }}" placeholder="Nombre de usuario">
       <label for="floatingInputName">Nombre de usuario</label>
     </div>
   {% endif %}
   
-  <div class="form-floating mb-3">
+  <div class="form-floating mb-2">
     <input type="email" class="form-control" name="email" id="floatingInputEmail" value="{{ email }}" placeholder="micorreo@ejemplo.com">
     <label for="floatingInputEmail">Email</label>
   </div>
-  <div class="form-floating mb-3">
+  <div class="form-floating mb-2">
     <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Contraseña">
     <label for="floatingPassword">Contraseña</label>
+    {% if pagina == 'Registro' %}
+      <span id="passwordHelpBlock" class="form-text">
+        La contraseña debe tener minimo 8 caracteras, una Mayuscula, un Numero y un Caracter especial.
+      </span>
+    {% endif %}
   </div>
 
   {% with messages = get_flashed_messages() %}

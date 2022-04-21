@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 
@@ -70,13 +70,17 @@ def loginPost():
 
 @app.get("/confirm/<token>")
 def confirm(token):
-    id = userController.validateToken(token)
+    id = userController.validToken(token)
     if id!= None:
         userController.confirmUser(id)
         # TODO: Template de cuenta validada
         return render_template('/auth/confirm.html')
     else:
         return "Token invalido: "+token
+
+@app.get("/cambiar-contraseña")
+def cambiarContraseña():
+    return render_template('/auth/cambiarPassword.html')
 
 @app.get("/logout")
 @login_required
