@@ -73,7 +73,8 @@ def confirm(token):
     id = userController.validateToken(token)
     if id!= None:
         userController.confirmUser(id)
-        return redirect(url_for('login'))
+        # TODO: Template de cuenta validada
+        return render_template('/auth/confirm.html')
     else:
         return "Token invalido: "+token
 
