@@ -4,7 +4,6 @@ from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
 from controllers import userController
-from send_email import emailBienvenida, send_email
 from config.settings import SECRET_KEY
 
 app = Flask(__name__)
@@ -43,7 +42,6 @@ def registrarUsuario():
         )
     else:
         userController.crearUsuario(user)
-        emailBienvenida(user.username, user.email)
         return redirect(url_for('login'))
 
 @app.get("/login")
@@ -52,7 +50,7 @@ def login():
 
 @app.post("/login")
 def loginPost():
-    user = User(0,None,request.form.get('email'),request.form.get('password'))
+    user = User(0,None,request.form.get('email'),request.form.get('password'),None,None)
     
     isValid = userController.isValidForm('login',user)
     if isValid == False:
@@ -65,15 +63,19 @@ def loginPost():
     else:
         user_logeado = userController.login(user)
         if user_logeado != None:
-            if user_logeado.password:
-                login_user(user_logeado)
-                return redirect(url_for('home'))
-            else:
-                flash("Contraseña invalida.")
-                return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
+            login_user(user_logeado)
+            return redirect(url_for('home'))
         else:
-            flash("Usuario no encontrado.")
             return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
+
+@app.get("/confirm/<token>")
+def confirm(token):
+    id = userController.validateToken(token)
+    if id!= None:
+        userController.confirmUser(id)
+        return redirect(url_for('login'))
+    else:
+        return "Token invalido: "+token
 
 @app.get("/logout")
 @login_required

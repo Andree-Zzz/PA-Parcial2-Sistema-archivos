@@ -11,11 +11,11 @@ from config import settings
 
 message = MIMEMultipart()
 
-def emailBienvenida(username: string, email: string):
+def emailBienvenida(username: string, email: string, url: string):
     send_email(
         asunto='Bienvenido, Registro Exitoso',
         destinatario=email,
-        msg_html=render_template("/mails/bienvenida.html", username = username)
+        msg_html=render_template("/mails/bienvenida.html", username = username, url = url)
     )
 
 def send_email(asunto, destinatario, msg_html):
