@@ -54,9 +54,23 @@ class UserModel():
             row = cursor.fetchone()
             cursor.close()
             if row != None:
-                return row[0]
+                return token
             else:
                 return None
+        except Exception as ex:
+            raise Exception(ex)
+
+    @classmethod
+    def generarToken(self, email):
+        try:
+            token = (''.join(random.choice(string.ascii_letters + string.digits) for _ in range(7)))
+            cursor = db.cursor()
+            cursor.execute("UPDATE users SET token=%s WHERE email =%s", (
+                token,
+                email,
+            ))
+            cursor.close()
+            return  token 
         except Exception as ex:
             raise Exception(ex)
     
@@ -112,6 +126,18 @@ class UserModel():
         except Exception as ex:
             raise Exception(ex)
     
+    @classmethod
+    def cambiarContraseña(self, password, id):
+        try:
+            cursor = db.cursor()
+            cursor.execute("UPDATE users SET password=%s, token='' WHERE  id=%s",(
+                generate_password_hash(password),
+                id,
+            ))
+            cursor.close()
+        except Exception as ex:
+            raise Exception(ex)
+
     @classmethod
     def emailUsed(self, email):
         try:

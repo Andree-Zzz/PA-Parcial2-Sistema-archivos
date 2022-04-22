@@ -1,3 +1,5 @@
+import email
+from pickle import NONE
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
@@ -5,6 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from models.entitites.user_entity import User
 from controllers import userController
 from config.settings import SECRET_KEY
+from send_email import emailCambiarPassword
 
 app = Flask(__name__)
 
@@ -31,7 +34,7 @@ def registro():
 
 @app.post("/registro")
 def registrarUsuario():
-    user = User(0,request.form.get('username'),request.form.get('email'),request.form.get('password'))
+    user = User(0,request.form.get('username'),request.form.get('email'),request.form.get('password'),None,None)
     isValid = userController.isValidForm('registro',user)
     if isValid == False:
         return render_template(
@@ -68,6 +71,46 @@ def loginPost():
         else:
             return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
 
+@app.get("/cambiar-contraseña")
+def cambiarPassword():
+    return render_template('/auth/emailCambiarPassword.html')
+
+@app.post("/cambiar-contraseña")
+def cambiarPasswordPost():
+    user = User(0,'',request.form.get('email'),None,None,None)
+    isValid = userController.isValidForm('email-cambiar-contraseña',user)
+    if isValid == False:
+        return render_template("/auth/emailCambiarPassword.html")
+    else:
+        row = userController.getUserByEmail(user.email)
+        user.id = row[0]
+        user.username = row[1]
+        token = userController.generarToken(user.email)
+        url = request.host_url+"cambiar-contraseña/"+token
+        emailCambiarPassword(user.username, user.email, url)
+        return redirect(url_for('login'))
+
+@app.get("/cambiar-contraseña/<token>")
+def cambiarPasswordToken(token):
+    validToken = userController.validToken(token)
+    if validToken != None:
+        return render_template('/auth/cambiarPassword.html',token=token)
+    else:
+        return redirect(url_for('login'))
+
+@app.post("/cambiarcontraseña")
+def cambiarPasswordTokenPost():
+    
+    password = request.form.get("password")
+    id = request.form.get("token")
+    user = User(0,None,None,password,None,None)
+    isValidForm = userController.isValidForm("cambiar-contraseña",user)
+    if isValidForm == False:
+        return render_template("/auth/cambiarPassword.html")
+    else:
+        userController.cambiarContraseña(password,id)
+        return redirect(url_for('login'))
+
 @app.get("/confirm/<token>")
 def confirm(token):
     id = userController.validToken(token)
@@ -77,10 +120,6 @@ def confirm(token):
         return render_template('/auth/confirm.html')
     else:
         return "Token invalido: "+token
-
-@app.get("/cambiar-contraseña")
-def cambiarContraseña():
-    return render_template('/auth/cambiarPassword.html')
 
 @app.get("/logout")
 @login_required

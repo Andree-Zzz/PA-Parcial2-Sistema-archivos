@@ -8,16 +8,23 @@ from flask import render_template
 
 from config import settings
 
-message = MIMEMultipart()
-
 def emailBienvenida(username, email, url):
     send_email(
         asunto='Bienvenido, Registro Exitoso',
         destinatario=email,
-        msg_html=render_template("/mails/bienvenida.html", username = username, url = url)
+        msg_html=render_template("/mails/bienvenidaMail.html", username = username, url = url)
+    )
+
+def emailCambiarPassword(username, email, url):
+    send_email(
+        asunto='Cambiar mi contraseña',
+        destinatario=email,
+        msg_html=render_template("/mails/cambiarContraseñaMail.html", username = username, url = url)
     )
 
 def send_email(asunto, destinatario, msg_html):
+    message = MIMEMultipart()
+    
     message['Subject'] = asunto
     message['From'] = settings.SMTP_USERNAME
     message['To'] = destinatario

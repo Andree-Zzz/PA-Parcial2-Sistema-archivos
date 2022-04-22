@@ -28,8 +28,14 @@ def login(user: User):
 def getUserById(id):
     return UserModel.getUserById(id)
 
+def getUserByEmail(email):
+    return UserModel.getUserByEmail(email)
+
 def crearUsuario(user: User):
     UserModel.crearUsuario(user)
+
+def cambiarContraseña(password, id):
+    UserModel.cambiarContraseña(password,id)
 
 def emailUsed(email):
     return UserModel.emailUsed(email)
@@ -37,6 +43,9 @@ def emailUsed(email):
 def emailValido(email):
     expresion_regular = r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"
     return re.match(expresion_regular, email) is not None
+
+def generarToken(email):
+    return UserModel.generarToken(email)
 
 def validToken(token):
     return UserModel.validToken(token)
@@ -98,5 +107,40 @@ def isValidForm(pagina, user: User):
             if user.password == "":
                 isValidPassword = False
                 flash("La Contraseña es Obligatoria")
+        else:
+            if pagina == "email-cambiar-contraseña":
+                if user.email == "":
+                    isValidEmail = False
+                    flash("El Email es requerido")
+                else:
+                    if not emailValido(user.email):
+                        isValidEmail = False
+                        flash("Ingresa un Email Valido")
+                    else:
+                        if not emailUsed(user.email):
+                            isValidEmail = False
+                            flash("El Email no se encuentra registrado")
+            if pagina == "cambiar-contraseña":
+                if user.password == "":
+                    isValidPassword = False
+                    flash("La Contraseña es requerida")
+
+                if len(user.password) < 8:
+                    isValidPassword = False
+                    flash("La Contraseña debe tener minimo 8 caracteres")
+                else:
+                    if any([caracter.isdigit() for caracter in user.password]):
+                        if any([caracter.isupper() for caracter in user.password]):
+                            if any([True if caracter in punctuation else False for caracter in user.password]):
+                                isValidPassword = True
+                            else:
+                                isValidPassword = False
+                                flash("La Contraseña debe tener: 1 caracter especial.")
+                        else:
+                            isValidPassword = False
+                            flash("La Contraseña debe tener: 1 una Mayuscula")
+                    else:
+                        isValidPassword = False
+                        flash("La Contraseña debe tener: 1 numero.")
 
         return (isValidUsername and isValidEmail and isValidPassword)

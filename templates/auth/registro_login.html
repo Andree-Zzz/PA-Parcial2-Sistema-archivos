@@ -20,7 +20,7 @@
   <form class="form-signin text-center" action="{{ url_for('loginPost') }}" method="POST">
 {% endif %}
 
-  <img class="mb-2" src="{{ url_for('static', filename='img/black-clover.png') }}" alt="" width="95" height="95">
+  <img class="mb-1" src="{{ url_for('static', filename='img/black-clover.png') }}" alt="" width="95" height="95">
   <h1 class="mb-3 fw-normal text-white">{{ pagina }}</h1>
 
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -60,9 +60,15 @@
   {% if pagina == 'Registro'%}
     <a href="{{ url_for('login') }}">¿Ya tienes una cuenta? Inicia sesion</a>
   {% endif %}
-  {% if pagina == 'Iniciar sesion'%}
-    <a href="{{ url_for('registro') }}">¿No tienes una cuenta? Registrate</a>
-  {% endif %}
+
+  <div class="d-flex flex-column align-itemns-center">
+    {% if pagina == 'Iniciar sesion'%}
+      <a href="{{ url_for('registro') }}">¿No tienes una cuenta? Registrate</a>
+    {% endif %}
+    {% if pagina == 'Iniciar sesion'%}
+      <a href="{{ url_for('cambiarPassword') }}">Olvide mi contraseña</a>
+    {% endif %}
+  </div>
 
   <button class="w-100 btn btn-lg btn-primary mt-2" type="submit">
     {% if pagina == 'Registro'%}Registrarme{% endif %}
