@@ -4,13 +4,24 @@
 
 {% block body %}
 
-    <div class="col-6">
-        <h1>Subir un nuevo Archivo</h1>
-        <form action="{{ url_for('subirArchivosPost') }}" method="POST" enctype="multipart/form-data">
+    <div class="col-lg-6 col-sm-12">
+        {% if action == 'subir' %}
+            <h1>Subir un nuevo Archivo</h1>
+        {% endif %}
+        {% if action == 'editar' %}
+            <h1>Editar un Archivo</h1>
+        {% endif %}
+        
+        {% if action == 'subir' %}
+            <form  action="{{ url_for('subirArchivosPost') }}" method="POST" enctype="multipart/form-data">
+        {% endif %}
+        {% if action == 'editar' %}
+            <form  action="/editar-archivo/{{nombre}}/{{filename}}" method="POST" enctype="multipart/form-data">
+        {% endif %}
             <div class="d-flex flex-column align-items-start">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                <input class="form-control form-control-lg mt-3" name="nombreArchivo" id="nombreArchivo" type="text" value="{{ nombre }}" placeholder="Ingresa un nombre para el archivo">
+                <input class="form-control form-control-lg mt-3" name="nombreArchivo" id="nombreArchivo" type="text" value="{{ nombre }}" placeholder="Ingresa un nombre para el archivo" autocomplete="off">
                 <label for="nombreArchivo" class="form-text" >
                     * Nombre del archivo Obligatorio
                 </label>
@@ -18,10 +29,17 @@
                 <label for="file" class="form-text">
                     * Archivo Obligatorio
                 </label>
-                <button type="submit" class="btn btn-primary btn-lg my-3">Subir</button>
+                <button type="submit" class="btn btn-primary btn-lg my-3">
+                    {% if action == 'subir' %}
+                        Subir
+                    {% endif %}
+                    {% if action == 'editar' %}
+                        Editar
+                    {% endif %}
+                </button>
             </div>
         </form>
-        <div class="col-8">
+        <div class="col-lg-8 col-sm-12">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                 {% for message in messages %}

@@ -1,5 +1,6 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
@@ -25,25 +26,56 @@ def index():
 @app.get("/home")
 @login_required
 def home():
-    return render_template("/home/home.html")
+    userId = current_user.id
+    files = fileController.getFilesByUderId(userId)
+    
+    return render_template("/home/home.html", files=files)
 
 @app.get("/subir-archivos")
 @login_required
 def subirArchivos():
-    return render_template("/home/subirArchivos.html")
+    return render_template("/home/subirArchivos.html",action='subir')
 
 @app.post("/subir-archivos")
 @login_required
 def subirArchivosPost():
+    userId = current_user.id
     nombre = request.form.get("nombreArchivo")
     file = request.files['file']
-    
+
     isValidForm= fileController.isValidFormUpload(nombre,file)
     if isValidForm == False:
-        return render_template("/home/subirArchivos.html", nombre=nombre)
+        return render_template("/home/subirArchivos.html", nombre=nombre,action='subir')
     
-    fileController.guardarFile(nombre,file)
-    return "Subir archivos post: "+nombre+" - "+file.filename
+    fileController.guardarFile(nombre,file,userId)
+    return redirect(url_for("home"))
+
+@app.get("/editar-archivo/<nombre>/<filename>")
+@login_required
+def editarArchivo(nombre,filename):
+    return render_template("/home/subirArchivos.html",nombre=nombre,filename=filename,action='editar')
+
+@app.post("/editar-archivo/<nombre>/<filename>")
+@login_required
+def editarArchivoPost(nombre,filename):
+
+    userId = current_user.id
+    nombre = request.form.get("nombreArchivo")
+    file = request.files['file']
+
+    isValidForm= fileController.isValidFormUpload(nombre,file)
+    if isValidForm == False:
+        return render_template("/home/subirArchivos.html", nombre=nombre,filename=filename,action='editar')
+
+    fileController.guardarFile(nombre,file,userId,filenameEditar=filename)
+    os.remove("./static/files/"+filename)
+    return redirect(url_for("home"))
+
+@app.get("/eliminar-archivo/<filename>")
+def eliminarArchivo(filename):
+    fileController.deleteFile(filename)
+    os.remove("./static/files/"+filename)
+    return redirect(url_for("home"))
 
 @app.get("/registro")
 def registro():

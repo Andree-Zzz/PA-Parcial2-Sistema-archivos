@@ -4,4 +4,33 @@
 
 {% block body %}
     <h1>Mis Archivos: {{ current_user.username }}</h1>
+    <hr>
+    <div class="row" data-bs-spy="scroll">
+      {% if files %}
+        {% for file in files %}
+          <div class="col-3 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="{{file[3]}}" class="card-img-top img-fluid" alt="" width="100%" height="180">
+                <div class="card-body">
+                  <h5 class="card-title">{{ file[1] }}</h5>
+                  <h6 class="card-subtitle mb-2">Tipo: <span class="text-muted">{{ file[4] }}</span></h6>
+                  <h6 class="card-subtitle mb-2">Megas: <span class="text-muted">{{ file[5] }}MB</h6>
+                  <h6 class="card-subtitle mb-2">
+                    <a href="{{ file[3] }}" class="text-decoration-none fst-italic fw-normal">{{ file[3] }}</a>
+                  </h6>
+
+                  <a href="/editar-archivo/{{file[1]}}/{{file[2]}}" class="card-link fw-bold" style="text-decoration: none;">Editar</a>
+                  <a href="/eliminar-archivo/{{file[2]}}" class="card-link link-danger fw-bold" style="text-decoration: none;">Eliminar</a>
+                  <a href="#" class="card-link fw-bold" style="text-decoration: none;">Compartir</a>
+                </div>
+              </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if not files %}
+          <h3 class="display-6">No hay Archivos por mostrar...</h3>
+      {% endif %}
+    </div>
+
 {% endblock %}

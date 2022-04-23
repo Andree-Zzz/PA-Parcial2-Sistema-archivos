@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 from flask import flash
 from models import fileModel
 
@@ -14,13 +15,21 @@ def isValidFormUpload(nombre, file):
     
     return (isValidNombre and isValidFile)
 
-def guardarFile(nombre,file):
-    date = str(datetime.now().day)+str(datetime.now().month)+str(datetime.now().hour)+str(datetime.now().second)+str(datetime.now().microsecond)
-    # date => 2242228856873
-    
+def guardarFile(nombre, file, userId, filenameEditar = ''):
+    date = str(datetime.now().microsecond)+str(datetime.now().second)+str(datetime.now().hour)+str(datetime.now().day)+str(datetime.now().month)
     # Guardar el file del formulario
-    file.save('./static/files/'+date+file.filename)
-    pathFile = '/static/files/'+date+file.filename
-    # http://127.0.0.1:5000/static/images/Night-Raid.jpg => ruta de acceso publico a la imagen
+    filename = date+file.filename
+    pathFile = '/static/files/'+filename
+    file.save('.'+pathFile)
+    type = file.content_type
+    megas = (os.path.getsize('.'+pathFile))/1048576
 
-    fileModel.guardarFile(nombre,pathFile)
+    fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, type, megas, userId)
+
+
+def getFilesByUderId(userId):
+    return fileModel.getFilesByUderId(userId)
+
+
+def deleteFile(filename):
+    fileModel.deleteFile(filename)
