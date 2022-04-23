@@ -1,10 +1,9 @@
-import email
-from pickle import NONE
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 
 from models.entitites.user_entity import User
+from controllers import fileController
 from controllers import userController
 from config.settings import SECRET_KEY
 from send_email import emailCambiarPassword
@@ -26,7 +25,25 @@ def index():
 @app.get("/home")
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("/home/home.html")
+
+@app.get("/subir-archivos")
+@login_required
+def subirArchivos():
+    return render_template("/home/subirArchivos.html")
+
+@app.post("/subir-archivos")
+@login_required
+def subirArchivosPost():
+    nombre = request.form.get("nombreArchivo")
+    file = request.files['file']
+    
+    isValidForm= fileController.isValidFormUpload(nombre,file)
+    if isValidForm == False:
+        return render_template("/home/subirArchivos.html", nombre=nombre)
+    
+    fileController.guardarFile(nombre,file)
+    return "Subir archivos post: "+nombre+" - "+file.filename
 
 @app.get("/registro")
 def registro():
@@ -98,24 +115,27 @@ def cambiarPasswordToken(token):
     else:
         return redirect(url_for('login'))
 
-@app.post("/cambiarcontraseña")
+@app.post("/cambiar-contraseña/cambiar")
 def cambiarPasswordTokenPost():
-    
-    password = request.form.get("password")
-    id = request.form.get("token")
-    user = User(0,None,None,password,None,None)
-    isValidForm = userController.isValidForm("cambiar-contraseña",user)
-    if isValidForm == False:
-        return render_template("/auth/cambiarPassword.html")
+    token = request.form.get("token")
+    isValidToken = userController.validToken(token)
+    if isValidToken != None:
+        password = request.form.get("password")
+        user = User(0,None,None,password,None,None)
+        isValidForm = userController.isValidForm("cambiar-contraseña",user)
+        if isValidForm == False:
+            return render_template("/auth/cambiarPassword.html")
+        else:
+            userController.cambiarContraseña(password,token)
+            return redirect(url_for('login'))
     else:
-        userController.cambiarContraseña(password,id)
-        return redirect(url_for('login'))
+        return "Token perdido o invalido"
 
 @app.get("/confirm/<token>")
 def confirm(token):
-    id = userController.validToken(token)
+    token = userController.validToken(token)
     if id!= None:
-        userController.confirmUser(id)
+        userController.confirmUser(token)
         # TODO: Template de cuenta validada
         return render_template('/auth/confirm.html')
     else:

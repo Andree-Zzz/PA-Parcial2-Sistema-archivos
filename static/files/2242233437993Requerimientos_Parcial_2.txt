@@ -1,0 +1,51 @@
+1. Registro del usuario:
+	-Informacion del usuario.
+		-Nombre.
+		-Email.
+		-contraseña.
+	-Email de bienvenida y confirmacion.
+	-Reenvio del email de confirmacion.
+	-Validacion de datos:
+		-Email no se encuentre registrado.
+		-Contraseña cumpla con unas politicas:
+			-Minimo 8 caracteres.
+			-Tenga una mayuscula.
+			-Tenga un numero.
+			-Tenga un caracter especial.
+		-Encriptacion de la contraseña.
+2. Inicio de sesion:
+	-Formulario de inicio:
+		-Email.
+		-Contraseña.
+	-Validacion:
+		-Usuario este comfirmado.
+3. Restablecer la contraseña:
+	-Formulario de restablecer contraseña:
+		-Email.
+	-Correo  con instructivo para recuperar la contraseña.
+4. Formulario para compartir archivos (Acceso con login):
+	-Nombre.
+	-Archivo.
+	-Validaciones (Nombre, archivo obligatorio).
+5. Listado de mis archivos (Acceso con login):
+	-Acciones:
+		-Crear.
+		-Editar.
+		-Eliminar.
+		-Compartir enlace de un archivo.
+6. Vista previa del archivo (Acceso publico, de manera local):
+	-Nombre.
+	-Tipo de archivo.
+	-Peso del Archivo.
+	-Previsualizacion (Icono del tipo de archivo o la Imagen).
+7. Extras:
+	-Validaciones en el servidor (Formularios, etc).
+	-Retroalimentacion (Mensajes de error, donde fallo, mensajes de correcto).
+	-Formulario sin perder informacion.
+	-Diseño.
+	-Arquitectura MVC:
+		-Modelo => SQL.
+		-Vista => Templates.
+		-Controlador => Conexion entre la vista y el modelo.
+	-Heroku
+		

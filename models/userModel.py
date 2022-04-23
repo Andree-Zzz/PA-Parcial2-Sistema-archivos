@@ -75,11 +75,11 @@ class UserModel():
             raise Exception(ex)
     
     @classmethod
-    def confirmUser(self,id):
+    def confirmUser(self,token):
         try:
             cursor = db.cursor()
-            cursor.execute("UPDATE users SET token='', confirmed='true' WHERE  id=%s", (
-                id,
+            cursor.execute("UPDATE users SET token='', confirmed='true' WHERE token=%s", (
+                token,
             ))
             cursor.close()
         except Exception as ex:
@@ -127,12 +127,12 @@ class UserModel():
             raise Exception(ex)
     
     @classmethod
-    def cambiarContraseña(self, password, id):
+    def cambiarContraseña(self, password, token):
         try:
             cursor = db.cursor()
-            cursor.execute("UPDATE users SET password=%s, token='' WHERE  id=%s",(
+            cursor.execute("UPDATE users SET password=%s, token='' WHERE  token=%s",(
                 generate_password_hash(password),
-                id,
+                token,
             ))
             cursor.close()
         except Exception as ex:

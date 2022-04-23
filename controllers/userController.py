@@ -34,8 +34,8 @@ def getUserByEmail(email):
 def crearUsuario(user: User):
     UserModel.crearUsuario(user)
 
-def cambiarContraseña(password, id):
-    UserModel.cambiarContraseña(password,id)
+def cambiarContraseña(password, token):
+    UserModel.cambiarContraseña(password,token)
 
 def emailUsed(email):
     return UserModel.emailUsed(email)
@@ -50,8 +50,8 @@ def generarToken(email):
 def validToken(token):
     return UserModel.validToken(token)
 
-def confirmUser(id):
-    UserModel.confirmUser(id)
+def confirmUser(token):
+    UserModel.confirmUser(token)
 
 def isValidForm(pagina, user: User):
     isValidUsername = True
