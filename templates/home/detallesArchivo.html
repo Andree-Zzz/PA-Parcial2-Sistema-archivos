@@ -1,0 +1,28 @@
+{% extends './home/base.html' %}
+
+{% block title %}Detalles{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-column justify-content-start align-items-center">
+        <h1 class="mb-3">Detalles</h1>
+        <div class="card col-12 col-sm-8 col-md-6 col-lg-6">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-header d-flex justify-content-center">
+                <h5 class="card-title">{{ file[1] }}</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-subtitle mb-2 lh-1">Filename: <span class="text-muted">{{ file[2] }}</span></h5>
+                <hr>
+                <h5 class="card-subtitle mb-2 lh-1">Tipo: <span class="text-muted">{{ file[4] }}</span></h5>
+                <hr>
+                <h5 class="card-subtitle mb-2">Megas: <span class="text-muted">{{ file[5] }}MB</h5>
+                <hr>
+                <h5 class="d-flex justify-content-around">
+                    <a href="{{ file[3] }}" class="text-decoration-none fw-bold" target="blank">Ver</a>
+                    <a href="/detalles-archivo/{{ file[2] }}" class="text-decoration-none fw-bold" target="blank">Compartir</a>
+                </h5>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

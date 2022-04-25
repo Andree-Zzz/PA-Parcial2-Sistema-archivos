@@ -30,12 +30,24 @@ def guardarFile(filenameEditar, nombre, filename, pathFile, type, megas, userId)
 def getFilesByUderId(userId):
     try:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM files WHERE user_id = %s", (
+        cursor.execute("SELECT * FROM files WHERE user_id = %s ORDER BY id DESC", (
             userId,
         ))
         files = cursor.fetchall()
         cursor.close()
         return files
+    except Exception as ex:
+        raise Exception(ex)
+
+def getFileByFilename(filename):
+    try:
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM files WHERE filename = %s", (
+            filename,
+        ))
+        file = cursor.fetchone()
+        cursor.close()
+        return file
     except Exception as ex:
         raise Exception(ex)
 

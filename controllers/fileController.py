@@ -21,15 +21,24 @@ def guardarFile(nombre, file, userId, filenameEditar = ''):
     filename = date+file.filename
     pathFile = '/static/files/'+filename
     file.save('.'+pathFile)
-    type = file.content_type
+    type = getTypeFileByFilename(file.filename)
     megas = (os.path.getsize('.'+pathFile))/1048576
 
     fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, type, megas, userId)
 
-
 def getFilesByUderId(userId):
     return fileModel.getFilesByUderId(userId)
 
+def getFileByFilename(filename: str):
+    return fileModel.getFileByFilename(filename)
 
-def deleteFile(filename):
+def deleteFile(filename: str):
     fileModel.deleteFile(filename)
+
+def getTypeFileByFilename(filename: str):
+    tipo = filename.split('.')
+    return tipo[tipo.__len__()-1]
+
+def setPreviewFileByFilename(filename: str):
+    tipo = filename.split('.')
+    return tipo[tipo.__len__()-1]

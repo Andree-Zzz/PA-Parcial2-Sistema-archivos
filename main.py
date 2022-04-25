@@ -23,13 +23,13 @@ def load_user(id):
 def index():
     return redirect(url_for("login"))
 
-@app.get("/home")
+@app.get("/mis-archivos")
 @login_required
-def home():
+def misArchivos():
     userId = current_user.id
     files = fileController.getFilesByUderId(userId)
     
-    return render_template("/home/home.html", files=files)
+    return render_template("/home/misArchivos.html", files=files)
 
 @app.get("/subir-archivos")
 @login_required
@@ -48,7 +48,7 @@ def subirArchivosPost():
         return render_template("/home/subirArchivos.html", nombre=nombre,action='subir')
     
     fileController.guardarFile(nombre,file,userId)
-    return redirect(url_for("home"))
+    return redirect(url_for("misArchivos"))
 
 @app.get("/editar-archivo/<nombre>/<filename>")
 @login_required
@@ -69,13 +69,20 @@ def editarArchivoPost(nombre,filename):
 
     fileController.guardarFile(nombre,file,userId,filenameEditar=filename)
     os.remove("./static/files/"+filename)
-    return redirect(url_for("home"))
+    return redirect(url_for("misArchivos"))
+
+@app.get("/detalles-archivo/<filename>")
+def detallesArchivo(filename):
+    file = fileController.getFileByFilename(filename)
+    # tipo = fileController.setPreviewFileByFilename(filename)
+    return render_template("/home/detallesArchivo.html",file=file)
 
 @app.get("/eliminar-archivo/<filename>")
+@login_required
 def eliminarArchivo(filename):
     fileController.deleteFile(filename)
     os.remove("./static/files/"+filename)
-    return redirect(url_for("home"))
+    return redirect(url_for("misArchivos"))
 
 @app.get("/registro")
 def registro():
@@ -116,7 +123,7 @@ def loginPost():
         user_logeado = userController.login(user)
         if user_logeado != None:
             login_user(user_logeado)
-            return redirect(url_for('home'))
+            return redirect(url_for('misArchivos'))
         else:
             return render_template("/auth/registro_login.html", pagina = 'Iniciar sesion', email = user.email)
 

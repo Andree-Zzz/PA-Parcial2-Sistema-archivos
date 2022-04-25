@@ -4,13 +4,15 @@
 
 {% block body %}
 
+
+<div class="d-flex flex-column align-items-center">
+    {% if action == 'subir' %}
+    <h1>Subir un nuevo Archivo</h1>
+    {% endif %}
+    {% if action == 'editar' %}
+    <h1>Editar un Archivo</h1>
+    {% endif %}
     <div class="col-lg-6 col-sm-12">
-        {% if action == 'subir' %}
-            <h1>Subir un nuevo Archivo</h1>
-        {% endif %}
-        {% if action == 'editar' %}
-            <h1>Editar un Archivo</h1>
-        {% endif %}
         
         {% if action == 'subir' %}
             <form  action="{{ url_for('subirArchivosPost') }}" method="POST" enctype="multipart/form-data">
@@ -52,5 +54,6 @@
             {% endwith %}
         </div>
     </div>
+</div>
 
 {% endblock %}
