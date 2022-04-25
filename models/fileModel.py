@@ -1,15 +1,16 @@
 from config.database import db
 
-def guardarFile(filenameEditar, nombre, filename, pathFile, type, megas, userId):
+def guardarFile(filenameEditar, nombre, filename, pathFile, tipo, megas, iconFile, userId):
     try:
         cursor = db.cursor()
         if filenameEditar == '':
-            cursor.execute("INSERT INTO files(nombre,filename,pathFile,type,megas,user_id) VALUES(%s,%s,%s,%s,%s,%s)", (
+            cursor.execute("INSERT INTO files(nombre,filename,pathFile,type,megas,icon_file,user_id) VALUES(%s,%s,%s,%s,%s,%s,%s)", (
                 nombre,
                 filename,
                 pathFile,
-                type,
+                tipo,
                 megas,
+                iconFile,
                 userId,
             ))
 

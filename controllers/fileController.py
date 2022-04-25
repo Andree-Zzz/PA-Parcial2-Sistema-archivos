@@ -21,10 +21,11 @@ def guardarFile(nombre, file, userId, filenameEditar = ''):
     filename = date+file.filename
     pathFile = '/static/files/'+filename
     file.save('.'+pathFile)
-    type = getTypeFileByFilename(file.filename)
+    tipo = _getTypeFileByFilename(file.filename)
+    iconFile = setIconFile(filename)
     megas = (os.path.getsize('.'+pathFile))/1048576
 
-    fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, type, megas, userId)
+    fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, tipo, megas, iconFile, userId)
 
 def getFilesByUderId(userId):
     return fileModel.getFilesByUderId(userId)
@@ -35,10 +36,26 @@ def getFileByFilename(filename: str):
 def deleteFile(filename: str):
     fileModel.deleteFile(filename)
 
-def getTypeFileByFilename(filename: str):
+def _getTypeFileByFilename(filename: str):
     tipo = filename.split('.')
     return tipo[tipo.__len__()-1]
 
-def setPreviewFileByFilename(filename: str):
-    tipo = filename.split('.')
-    return tipo[tipo.__len__()-1]
+def setIconFile(filename: str):
+    tipo = _getTypeFileByFilename(filename)
+    iconFile = '/static/icons-files/generico.png'
+    if tipo == 'txt':
+        iconFile = '/static/icons-files/txt.png'
+    if tipo == 'docx' or tipo == 'doc':
+        iconFile = '/static/icons-files/word.png'
+    if tipo == 'xlsx' or tipo == 'xls':
+        iconFile = '/static/icons-files/excel.png'
+    if tipo == 'pdf':
+        iconFile = '/static/icons-files/pdf.png'
+    if tipo == 'pptx' or tipo == 'ppt':
+        iconFile = '/static/icons-files/powerpoint.png'
+    if tipo == 'csv':
+        iconFile = '/static/icons-files/csv.png'
+    if tipo == 'jpg' or tipo == 'jpeg' or tipo == 'png' or tipo == 'gif' or tipo == 'tiff' or tipo == 'svg':
+        iconFile = '/static/files/'+filename
+
+    return iconFile
