@@ -11,16 +11,21 @@
                 <h5 class="card-title">{{ file[1] }}</h5>
             </div>
             <div class="card-body">
-                <h5 class="card-subtitle mb-2 lh-1">Filename: <span class="text-muted">{{ file[2] }}</span></h5>
+                <h5 class="card-subtitle mb-2 d-flex justify-content-center">Filename: <span class="text-muted">{{ file[2] }}</span></h5>
                 <hr>
-                <h5 class="card-subtitle mb-2 lh-1">Tipo: <span class="text-muted">{{ file[4] }}</span></h5>
+                <div class="d-flex justify-content-around">
+                    <h5 class="card-subtitle mb-2 lh-1">Tipo: <span class="text-muted">{{ file[4] }}</span></h5>
+                    <h5 class="card-subtitle mb-2">Megas: <span class="text-muted">{{ file[5] }}MB</h5>
+                </div>
                 <hr>
-                <h5 class="card-subtitle mb-2">Megas: <span class="text-muted">{{ file[5] }}MB</h5>
-                <hr>
-                <h5 class="d-flex justify-content-around">
-                    <a href="{{ file[3] }}" class="text-decoration-none fw-bold" target="blank">Ver</a>
-                    <a href="/detalles-archivo/{{ file[2] }}" class="text-decoration-none fw-bold" target="blank">Compartir</a>
-                </h5>
+                <div class="d-flex justify-content-around">
+                    <h5>
+                        <a href="{{ file[3] }}" class="text-decoration-none fw-bold" target="blank">Ver</a>
+                    </h5>
+                    <h5>
+                        <a href="/detalles-archivo/{{ file[2] }}" class="text-decoration-none fw-bold" target="blank">Compartir</a>
+                    </h5>
+                </div>
             </div>
         </div>
     </div>
