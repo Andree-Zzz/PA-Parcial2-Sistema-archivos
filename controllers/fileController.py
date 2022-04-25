@@ -22,7 +22,7 @@ def guardarFile(nombre, file, userId, filenameEditar = ''):
     pathFile = '/static/files/'+filename
     file.save('.'+pathFile)
     tipo = _getTypeFileByFilename(file.filename)
-    iconFile = setIconFile(filename)
+    iconFile = _setIconFile(filename)
     megas = (os.path.getsize('.'+pathFile))/1048576
 
     fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, tipo, megas, iconFile, userId)
@@ -40,7 +40,7 @@ def _getTypeFileByFilename(filename: str):
     tipo = filename.split('.')
     return tipo[tipo.__len__()-1]
 
-def setIconFile(filename: str):
+def _setIconFile(filename: str):
     tipo = _getTypeFileByFilename(filename)
     iconFile = '/static/icons-files/generico.png'
     if tipo == 'txt':
