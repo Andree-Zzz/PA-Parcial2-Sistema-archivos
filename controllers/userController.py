@@ -32,8 +32,8 @@ def getUserByEmail(email):
     return UserModel.getUserByEmail(email)
 
 def crearUsuario(user: User):
-    flash("Registro","success")
-    # UserModel.crearUsuario(user)
+    flash("Registro Exitoso","success")
+    UserModel.crearUsuario(user)
 
 def cambiarContraseña(password, token):
     UserModel.cambiarContraseña(password,token)
@@ -62,11 +62,11 @@ def isValidForm(pagina, user: User):
         
         if user.username == "":
             isValidUsername = False
-            flash("El Nombre de usuario es requerido","warning")
+            flash("Nombre de usuario Obligatorio","warning")
 
         if user.email == "":
             isValidEmail = False
-            flash("El Email es requerido","warning")
+            flash("Email Obligatorio","warning")
         else:
             if not emailValido(user.email):
                 isValidEmail = False
@@ -74,7 +74,7 @@ def isValidForm(pagina, user: User):
             else:
                 if emailUsed(user.email):
                     isValidEmail = False
-                    flash("El Email ya fue registrado","warning")
+                    flash("Email ya registrado","warning")
             
         isValidPassword = isValidFormPassword(user.password)
         
@@ -112,7 +112,7 @@ def isValidFormPassword(password: str):
 
     if password == "":
         isValidPassword = False
-        flash("La Contraseña es requerida","warning")
+        flash("La Contraseña es Obligatoria","warning")
     else:
         if len(password) < 8:
             isValidPassword = False

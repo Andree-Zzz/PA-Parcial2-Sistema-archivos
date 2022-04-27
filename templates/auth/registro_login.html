@@ -41,7 +41,7 @@
     <label for="floatingPassword">Contraseña</label>
     {% if pagina == 'Registro' %}
       <span id="passwordHelpBlock" class="form-text">
-        La contraseña debe tener minimo 8 caracteras, una Mayuscula, un Numero y un Caracter especial.
+        Minimo 8 caracteras, una Mayuscula, un Numero y un Caracter especial.
       </span>
     {% endif %}
   </div>
@@ -50,21 +50,24 @@
     {% if messages %}
       {% for category, message in messages %}
         {% if category == 'warning' %}
-        <div class="alert alert-warning alert-dismissible" role="alert">
-          <strong>{{ message }}</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+          <div class="alert alert-warning alert-dismissible d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endif %}
+        {% if category == 'success' %}
+          <div class="alert alert-success d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+            <div>
+              {{message}}, ir a <a href="{{url_for('login')}}" class="link-success" style="text-decoration: underline;">Iniciar sesion</a>
+            </div>
+          </div>
         {% endif %}
       {% endfor %}
     {% endif %}
   {% endwith %}
 
-  <!-- <div class="alert alert-success d-flex align-items-center" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-    <div>
-      Registro exitodo, ir a <a href="{{url_for('login')}}" class="link-success" style="text-decoration: underline;">Iniciar sesion</a>
-    </div>
-  </div> -->
 
   {% if pagina == 'Registro'%}
     <a href="{{ url_for('login') }}">¿Ya tienes una cuenta? Inicia sesion</a>
