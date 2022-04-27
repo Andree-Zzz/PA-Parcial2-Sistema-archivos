@@ -12,17 +12,13 @@ def login(user: User):
             return None
         else:
             user = UserModel.login(user)
-            if user != None:
-                if user.password:
-                    return user
-                else:
-                    flash("Contraseña invalida.","error")
-                    return None
-            else:
-                flash("Usuario no encontrado.","error")
+            if user.password:
                 return user
+            else:
+                flash("Contraseña invalida.","error")
+                return None
     else:
-        flash("Usuario no encontrado","warning")
+        flash("Usuario no encontrado","error")
         return None
 
 def getUserById(id):
@@ -32,7 +28,7 @@ def getUserByEmail(email):
     return UserModel.getUserByEmail(email)
 
 def crearUsuario(user: User):
-    flash("Registro Exitoso","success")
+    flash("Registro Exitoso, revisa tu correo y confirma tu cuenta","success")
     UserModel.crearUsuario(user)
 
 def cambiarContraseña(password, token):
@@ -57,6 +53,7 @@ def confirmUser(token):
 def isValidForm(pagina, user: User):
     isValidUsername = True
     isValidEmail = True
+    isValidPassword= True
 
     if pagina == 'registro':
         
