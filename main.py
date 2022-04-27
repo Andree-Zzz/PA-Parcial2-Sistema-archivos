@@ -101,7 +101,10 @@ def registrarUsuario():
         )
     else:
         userController.crearUsuario(user)
-        return redirect(url_for('login'))
+        return render_template(
+            "/auth/registro_login.html",
+            pagina = 'Registro'
+        )
 
 @app.get("/login")
 def login():
