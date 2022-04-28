@@ -60,17 +60,20 @@ def editarArchivo(nombre,filename):
 def editarArchivoPost(nombre,filename):
 
     userId = current_user.id
-    nombre = request.form.get("nombreArchivo")
+    nombreform = request.form.get("nombreArchivo")
     file = request.files['file']
 
-    isValidForm= fileController.isValidFormUpload(nombre,file,'editar')
+    isValidForm= fileController.isValidFormUpload(nombreform,file,'editar')
     if isValidForm == False:
-        return render_template("/home/subirArchivos.html", nombre=nombre,filename=filename,action='editar')
+        return render_template("/home/subirArchivos.html", nombre=nombreform,filename=filename,action='editar')
+
+    if nombre == nombreform:
+        return redirect(url_for('misArchivos'))
 
     if file:
         os.remove("./static/files/"+filename)
     
-    fileController.guardarFile(nombre,file,userId,filenameEditar=filename)
+    fileController.guardarFile(nombreform,file,userId,filenameEditar=filename)
 
     return redirect(url_for("misArchivos"))
 
