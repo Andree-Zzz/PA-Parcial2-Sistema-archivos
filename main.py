@@ -67,7 +67,7 @@ def editarArchivoPost(nombre,filename):
     if isValidForm == False:
         return render_template("/home/subirArchivos.html", nombre=nombreform,filename=filename,action='editar')
 
-    if nombre == nombreform:
+    if nombre == nombreform and not file:
         return redirect(url_for('misArchivos'))
 
     if file:
@@ -80,7 +80,8 @@ def editarArchivoPost(nombre,filename):
 @app.get("/detalles-archivo/<filename>")
 def detallesArchivo(filename):
     file = fileController.getFileByFilename(filename)
-    return render_template("/home/detallesArchivo.html",file=file)
+    url = request.host_url+'detalles-archivo/'+file[2]
+    return render_template("/home/detallesArchivo.html",file=file,url=url)
 
 @app.get("/eliminar-archivo/<filename>")
 @login_required
@@ -203,4 +204,4 @@ def status_404(error):
 app.register_error_handler(401,status_401)
 app.register_error_handler(404,status_404)
 csrf.init_app(app)
-# app.run(debug=True) # Comentar para Heroku
+# app.run(debug=True) # Comentar para deploy a Heroku

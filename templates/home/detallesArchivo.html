@@ -14,21 +14,16 @@
                 <h5 class="card-title">{{ file[1] }}</h5>
             </div>
             <div class="card-body">
-                <h5 class="card-subtitle mb-2 text-muted text-center">{{ file[2] }}</h5>
+                <a href="{{ file[3] }}" class="text-decoration-none fw-bold text-primary" target="blank">
+                    <h5 class="card-subtitle mb-2 text-center">{{ file[2] }}</h5>
+                </a>
                 <hr>
                 <div class="d-flex justify-content-around">
                     <h5 class="card-subtitle mb-2 lh-1">Tipo: <span class="text-muted">{{ file[4] }}</span></h5>
                     <h5 class="card-subtitle mb-2">Megas: <span class="text-muted">{{ file[5] }}MB</h5>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-around">
-                    <h5>
-                        <a href="{{ file[3] }}" class="text-decoration-none fw-bold" target="blank">Ver</a>
-                    </h5>
-                    <h5>
-                        <a href="/detalles-archivo/{{ file[2] }}" class="text-decoration-none fw-bold" target="blank">Compartir</a>
-                    </h5>
-                </div>
+                <input class="form-control fst-italic fw-bold text-muted" type="text" value="{{url}}" aria-label="readonly input example" readonly>
             </div>
         </div>
     </div>
