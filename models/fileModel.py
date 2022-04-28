@@ -1,6 +1,6 @@
 from config.database import db
 
-def guardarFile(filenameEditar, nombre, filename, pathFile, tipo, megas, iconFile, userId):
+def guardarFile(filenameEditar, nombre, filename='', pathFile='', tipo='', megas=0, iconFile='', userId=''):
     try:
         cursor = db.cursor()
         if filenameEditar == '':
@@ -15,14 +15,21 @@ def guardarFile(filenameEditar, nombre, filename, pathFile, tipo, megas, iconFil
             ))
 
         else:
-            cursor.execute("UPDATE files SET nombre=%s, filename=%s, pathFile=%s, type=%s, megas=%s WHERE filename=%s", (
-                nombre,
-                filename,
-                pathFile,
-                type,
-                megas,
-                filenameEditar,
-            ))
+            if filename != '':
+                cursor.execute("UPDATE files SET nombre=%s, filename=%s, pathFile=%s, type=%s, megas=%s,icon_file=%s WHERE filename=%s", (
+                    nombre,
+                    filename,
+                    pathFile,
+                    tipo,
+                    megas,
+                    iconFile,
+                    filenameEditar,
+                ))
+            else:
+                cursor.execute("UPDATE files SET nombre=%s WHERE filename=%s", (
+                    nombre,
+                    filenameEditar,
+                ))
 
         cursor.close()
     except Exception as ex:

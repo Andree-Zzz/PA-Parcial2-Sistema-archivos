@@ -3,29 +3,33 @@ import os
 from flask import flash
 from models import fileModel
 
-def isValidFormUpload(nombre, file):
+def isValidFormUpload(nombre, file,action='subir'):
     isValidNombre = True
     isValidFile = True
     if nombre == '':
         isValidNombre = False
         flash("El Nombre del Archivo es requerido")
-    if not file:
-        isValidFile = False
-        flash("El Archivo es requerido")
+    if action != 'editar':
+        if not file:
+            isValidFile = False
+            flash("El Archivo es requerido")
     
     return (isValidNombre and isValidFile)
 
 def guardarFile(nombre, file, userId, filenameEditar = ''):
     date = str(datetime.now().microsecond)+str(datetime.now().second)+str(datetime.now().hour)+str(datetime.now().day)+str(datetime.now().month)
     # Guardar el file del formulario
-    filename = date+file.filename
-    pathFile = '/static/files/'+filename
-    file.save('.'+pathFile)
-    tipo = _getTypeFileByFilename(file.filename)
-    iconFile = _setIconFile(filename)
-    megas = (os.path.getsize('.'+pathFile))/1048576
-
-    fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, tipo, megas, iconFile, userId)
+    if file:
+        filename = date+file.filename
+        pathFile = '/static/files/'+filename
+        file.save('.'+pathFile)
+        tipo = _getTypeFileByFilename(file.filename)
+        iconFile = _setIconFile(filename)
+        megas = (os.path.getsize('.'+pathFile))/1048576
+        fileModel.guardarFile(filenameEditar,nombre, filename, pathFile, tipo, megas, iconFile, userId)
+    else:
+        fileModel.guardarFile(filenameEditar,nombre)
+        
 
 def getFilesByUderId(userId):
     return fileModel.getFilesByUderId(userId)
