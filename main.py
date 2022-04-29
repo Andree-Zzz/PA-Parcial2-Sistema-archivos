@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 
@@ -153,6 +153,7 @@ def cambiarPasswordPost():
         token = userController.generarToken(user.email)
         url = request.host_url+"cambiar-contraseña/"+token
         emailCambiarPassword(user.username, user.email, url)
+        flash("Email de cambio de contraseña enviado","success")
         return redirect(url_for('login'))
 
 @app.get("/cambiar-contraseña/<token>")
@@ -161,6 +162,7 @@ def cambiarPasswordToken(token):
     if validToken != None:
         return render_template('/auth/cambiarPassword.html',token=token)
     else:
+        flash("Contraseña cambiada","success")
         return redirect(url_for('login'))
 
 @app.post("/cambiar-contraseña/cambiar")
